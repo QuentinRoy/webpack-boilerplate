@@ -1,3 +1,4 @@
+const webpack = require("webpack");
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -9,9 +10,8 @@ module.exports = {
     main: ["./index.js"],
   },
   output: {
-    filename: "[name].bundle.js",
-    chunkFilename: "[name].bundle.js",
-    // path: resolve("dist")
+    filename: "[name].[contenthash].js",
+    path: resolve("dist"),
   },
   context: resolve("src"),
   module: {
@@ -28,11 +28,11 @@ module.exports = {
     ],
   },
   plugins: [
+    new webpack.HashedModuleIdsPlugin(),
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // both options are optional
-      filename: "[name].css",
-      chunkFilename: "[id].css",
+      filename: "[name].[contenthash].css",
     }),
     new HtmlWebpackPlugin({
       title: "Webpack boilerplate",
@@ -40,15 +40,12 @@ module.exports = {
     }),
   ],
   optimization: {
-    runtimeChunk: {
-      name: "manifest",
-    },
+    runtimeChunk: "single",
     splitChunks: {
       cacheGroups: {
         vendor: {
           test: /[\\/]node_modules[\\/]/,
           name: "vendors",
-          priority: -20,
           chunks: "all",
         },
       },
