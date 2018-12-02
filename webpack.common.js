@@ -10,7 +10,6 @@ module.exports = {
     main: ["./index.js"],
   },
   output: {
-    filename: "[name].[contenthash].js",
     path: resolve("dist"),
   },
   context: resolve("src"),
@@ -29,11 +28,6 @@ module.exports = {
   },
   plugins: [
     new webpack.HashedModuleIdsPlugin(),
-    new MiniCssExtractPlugin({
-      // Options similar to the same options in webpackOptions.output
-      // both options are optional
-      filename: "[name].[contenthash].css",
-    }),
     new HtmlWebpackPlugin({
       title: "Webpack boilerplate",
       template: resolve("src/index.ejs"),

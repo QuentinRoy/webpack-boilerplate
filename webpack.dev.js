@@ -1,17 +1,19 @@
+const path = require("path");
 const webpack = require("webpack");
 const merge = require("webpack-merge");
-const path = require("path");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const commonConfig = require("./webpack.common.js");
 
 module.exports = merge(commonConfig, {
   mode: "development",
   devtool: "eval-source-map",
+  output: {
+    filename: "[name].js",
+  },
   plugins: [
-    new webpack.EnvironmentPlugin({
-      NODE_ENV: "development", // use 'development' unless process.env.NODE_ENV is defined
-      DEBUG: true,
-    }),
+    new webpack.EnvironmentPlugin({ NODE_ENV: "development" }),
     new webpack.HotModuleReplacementPlugin(),
+    new MiniCssExtractPlugin({ filename: "[name].css" }),
   ],
   devServer: {
     contentBase: path.join(__dirname, "dist"),
@@ -21,5 +23,4 @@ module.exports = merge(commonConfig, {
   optimization: {
     namedModules: true,
   },
-  // plugins: ['react-hot-loader/babel']
 });
