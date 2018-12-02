@@ -1,12 +1,21 @@
 module.exports = api => {
   const isForProd = api.env("production");
-  // const isForDev = api.env("dev");
-  api.cache.never();
+  api.cache.using(() => isForProd);
   const presets = [
     [
       "@babel/preset-env",
       {
-        targets: { browsers: isForProd ? ">1%" : ">10%" },
+        // Use browserlistrc in production mode, but only compile for most
+        // recent browsers in development mode.
+        targets: isForProd
+          ? undefined
+          : {
+              browsers: [
+                "last 2 Chrome versions",
+                "last 2 Firefox versions",
+                "last 2 Safari versions",
+              ],
+            },
         useBuiltIns: "usage",
         modules: false,
         loose: true,
